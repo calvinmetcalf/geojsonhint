@@ -20,6 +20,7 @@ function hint(str) {
         }
     }
 
+
     function everyIs(_, type) {
         return _.every(function(x) { return typeof x === 'number'; });
     }
@@ -226,4 +227,19 @@ function hint(str) {
     return errors;
 }
 
+function context(errors, str, n) {
+    n = n || 3;
+    var lines = str.split('\n');
+
+    function getstr(l, n) {
+        return lines.slice(Math.max(l - n, 0),
+            Math.min(l + n, lines.length - 1)).join('\n');
+    }
+
+    return errors.map(function(e) {
+        if (e.line) e.context = getstr(e.line, n);
+    });
+}
+
 module.exports.hint = hint;
+module.exports.context = context;
